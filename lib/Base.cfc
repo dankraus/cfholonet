@@ -12,6 +12,7 @@ component {
 		variables.meta = getMetaData();
 		variables.baseURL = "http://swapi.co/api/";
 		variables.slug = lCase(listLast(meta.fullname, "."));
+
 		if(not structIsEmpty(data)){
 			populateModel(data);
 		}
@@ -44,17 +45,19 @@ component {
 	}
 
 	public function onMissingMethod(name){
-		var key = replace(arguments.name, "fetch", "");
+		var entity = replace(arguments.name, "fetch", "");
+		var entityPathToLoad = replaceNoCase(meta.fullname, variables.slug, entity);
 		var data = {};
-		if(structKeyExists(this, key)){
-			if(isArray(this[key])){
-				return this[key].map(function(uri){
+
+		if(structKeyExists(this, entity)){
+			if(isArray(this[entity])){
+				return this[entity].map(function(uri){
 					data = getURI(uri);
-					return createObject("component", meta.fullname).init(data);
+					return createObject("component", entityPathToLoad).init(data);
 				});
-			} else if(isValidURL(this[key])){
+			} else if(isValidURL(this[entity])){
 				data = getURI(uri);
-				return createObject("component", meta.fullname).init(data);
+				return createObject("component", entityPathToLoad).init(data);
 			}
 
 		}
