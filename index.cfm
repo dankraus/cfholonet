@@ -1,7 +1,7 @@
 <cfscript>
 	swapi = new lib.SWAPI();
-	p = new lib.Person(1);
-	writeDump(getMetaData());
+	p = new lib.Films(1);
+	//writeDump(getMetaData());
 	//test = swapi.getPeople();
 	//test = swapi.getSchemaFor("people");
 	//writeDump(p.getStarships());

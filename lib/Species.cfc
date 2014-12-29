@@ -59,18 +59,18 @@ component extends="Base" accessors="true"{
 
 
 	private function populateModel(required struct response){
-		setName(response["name"]);
-		setClassification(response["classification"]);
-		setDesignation(response["designation"]);
-		setAverageHeight(response["average_height"]);
-		setSkinColors(listToArray(response["skin_colors"]));
-		setHairColors(listToArray(response["hair_colors"]));
-		setEyeColors(listToArray(response["eye_colors"]));
-		setAverageLifespan(response["average_lifespan"]);
-		setLanguage(response["language"]);
-		setUrl(response["url"]);
-		setCreatedAt(response["created"]);
-		setEditedAt(response["edited"]);
+		this.Name = response["name"];
+		this.Classification = response["classification"];
+		this.Designation = response["designation"];
+		this.AverageHeight = response["average_height"];
+		this.SkinColors = listToArray(response["skin_colors"];
+		this.HairColors = listToArray(response["hair_colors"];
+		this.EyeColors = listToArray(response["eye_colors"];
+		this.AverageLifespan = response["average_lifespan"];
+		this.Language = response["language"];
+		this.Url = response["url"];
+		this.CreatedAt = response["created"];
+		this.EditedAt = response["edited"];
 
 		variables.associations.films = response["films"];
 		variables.associations.people = response["people"];

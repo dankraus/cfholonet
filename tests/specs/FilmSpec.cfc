@@ -17,94 +17,113 @@ component extends="testbox.system.BaseSpec"{
 /*********************************** BDD SUITES ***********************************/
 
 	function run(){
-		describe("Init", function(){
-			it('inits with a numeric id', function(){
-				var film = new lib.Film(2);
-				expect(film).toBeInstanceOf('Film');
+		describe("finder methods", function(){
+			it("finds a Film", function(){
+				var films = new lib.Films();
+				var film = films.find(1);
+				expect(film).toBeInstanceOf('Films');
+				expect(film.title).toBe('A New Hope');
+				expect(film.episode_id).toBe('4');
 			});
 
-			it('inits with a uri', function(){
-				var film = new lib.Film(uri='http://swapi.co/api/films/2');
-				expect(film).toBeInstanceOf('Film');
-			});
-
-			it('throws error without an id or uri', function(){
-				expect(function(){ new lib.Film() }).toThrow("exception", "Requires numeric id for resource or complete resource URI string");
+			it("gets all films", function(){
+				var films = new lib.Films();
+				var films = films.all();
+				expect(films).toBeTypeOf('array');
+				expect(films[1].title).toBe('A New Hope');
+				expect(films[1].episode_id).toBe('4');
 			});
 		});
 
-		describe("Populates model properties", function(){
-			var film = new lib.Film(1);
-
-			it("can get its title", function(){
-				expect(film.getTitle()).toBePresent();
-			});
-			it("can get its episodeId", function(){
-				expect(film.getEpisodeId()).toBePresent();
-			});
-			it("can get its openingCrawl", function(){
-				expect(film.getOpeningCrawl()).toBePresent();
-			});
-			it("can get its director", function(){
-				expect(film.getDirector()).toBePresent();
-			});
-			it("can get its producer", function(){
-				expect(film.getProducer()).toBePresent();
-			});
-			it("can get its url", function(){
-				expect(film.getUrl()).toBePresent();
-			});
-			it("can get its createdAt", function(){
-				expect(film.getCreatedAt()).toBePresent();
-			});
-			it("can get its editedAt", function(){
-				expect(film.getEditedAt()).toBePresent();
-			});
-		});
-
-		describe("Gets associated resources", function(){
-			it("gets characters", function(){
-				var film = new lib.Film(1);
-				var characters = film.getCharacters();
-				expect(characters).toBeTypeOf('array');
-				expect(characters[1]).toBeInstanceOf('Person');
-			});
-			it("gets planets", function(){
-				var film = new lib.Film(1);
-				var planets = film.getPlanets();
-				expect(planets).toBeTypeOf('array');
-				expect(planets[1]).toBeInstanceOf('Planet');
-			});
-			it("gets starships", function(){
-				var film = new lib.Film(1);
-				var starships = film.getStarships();
-				expect(starships).toBeTypeOf('array');
-				expect(starships[1]).toBeInstanceOf('Starship');
-			});
-			it("gets vehicles", function(){
-				var film = new lib.Film(1);
-				var vehicles = film.getVehicles();
-				expect(vehicles).toBeTypeOf('array');
-				expect(vehicles[1]).toBeInstanceOf('Vehicle');
-			});
-			it("gets species", function(){
-				var film = new lib.Film(1);
-				var species = film.getSpecies();
-				expect(species).toBeTypeOf('array');
-				expect(species[1]).toBeInstanceOf('Species');
+		describe("fetch methods", function(){
+			it("fetches starships", function(){
+				var films = new lib.Films();
+				var film = films.find(1);
+				var starships = film.fetchStarships();
+				expect(starships[1]).toBeInstanceOf('Starships');
 			});
 		});
 
 		describe("Schema", function(){
-			it("gets its schema", function(){
-				var film = new lib.Film(2);
-				var response = film.getSchema();
+			it("can gets its schema", function(){
+				var films = new lib.Films();
+				var response = films.getSchema();
 				var schemaJSON = fileRead(getDirectoryFromPath("/tests/resources/") & "/filmsSchema.json");
 
 				expect(response).toBeTypeOf('struct');
 				expect(response).toBe(deserializeJSON(schemaJSON));
 			});
 		});
+
+		// film = Films.find 1
+  //     expect(film['title']).to eq 'A New Hope'
+  //     expect(film['episode_id']).to eq 4
+
+
+
+		// describe("Populates model properties", function(){
+		// 	var film = new lib.Film(1);
+
+		// 	it("can get itstitle", function(){
+		// 		expect(film.title).toBePresent();
+		// 	});
+		// 	it("can get itsepisodeId", function(){
+		// 		expect(film.episodeId).toBePresent();
+		// 	});
+		// 	it("can get itsopeningCrawl", function(){
+		// 		expect(film.openingCrawl).toBePresent();
+		// 	});
+		// 	it("can get itsdirector", function(){
+		// 		expect(film.director).toBePresent();
+		// 	});
+		// 	it("can get itsproducer", function(){
+		// 		expect(film.producer).toBePresent();
+		// 	});
+		// 	it("can get itsurl", function(){
+		// 		expect(film.url).toBePresent();
+		// 	});
+		// 	it("can get itscreatedAt", function(){
+		// 		expect(film.created).toBePresent();
+		// 	});
+		// 	it("can get itseditedAt", function(){
+		// 		expect(film.edited).toBePresent();
+		// 	});
+		// });
+
+		// describe("Gets associated resources", function(){
+		// 	it("gets characters", function(){
+		// 		var film = new lib.Film(1);
+		// 		var characters = film.getCharacters();
+		// 		expect(characters).toBeTypeOf('array');
+		// 		expect(characters[1]).toBeInstanceOf('Person');
+		// 	});
+		// 	it("gets planets", function(){
+		// 		var film = new lib.Film(1);
+		// 		var planets = film.getPlanets();
+		// 		expect(planets).toBeTypeOf('array');
+		// 		expect(planets[1]).toBeInstanceOf('Planet');
+		// 	});
+		// 	it("gets starships", function(){
+		// 		var film = new lib.Film(1);
+		// 		var starships = film.getStarships();
+		// 		expect(starships).toBeTypeOf('array');
+		// 		expect(starships[1]).toBeInstanceOf('Starship');
+		// 	});
+		// 	it("gets vehicles", function(){
+		// 		var film = new lib.Film(1);
+		// 		var vehicles = film.getVehicles();
+		// 		expect(vehicles).toBeTypeOf('array');
+		// 		expect(vehicles[1]).toBeInstanceOf('Vehicle');
+		// 	});
+		// 	it("gets species", function(){
+		// 		var film = new lib.Film(1);
+		// 		var species = film.getSpecies();
+		// 		expect(species).toBeTypeOf('array');
+		// 		expect(species[1]).toBeInstanceOf('Species');
+		// 	});
+		// });
+
+
 	}
 
 }
