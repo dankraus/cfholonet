@@ -40,6 +40,16 @@ Pulled from the specs for reference
 		expect(vehicles[1]).toBeInstanceOf('Vehicles');
 	});
 
+	it("can gets its schema", function(){
+		var films = new lib.Films();
+		var response = films.getSchema();
+		var schemaJSON = fileRead(getDirectoryFromPath("/tests/resources/") & "/filmsSchema.json");
+
+		expect(response).toBeTypeOf('struct');
+		expect(response).toBe(deserializeJSON(schemaJSON));
+
+	});
+
 
 You can look at the SWAPI for the complete reference of properties available to each entity. The library uses some metaprogramming techniques inspired by a lot of Ruby   based REST API wrappers to support whatever comes back in the API to be accessible by the object.
 
