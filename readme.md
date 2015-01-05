@@ -1,4 +1,6 @@
-#Star Wars API - CFML Wrapper
+#CFHolonet - A CFML Wrapper for The Star Wars API
+
+##Intro
 
 This is a wrapper lib for the [Star Wars API](http://swapi.co) written in CFML (ColdFusion). It's been tested against Railo 4, so quite honestly, I don't know if it works in Adobe ColdFusion. I haven't tried. If you want to try it and it doesn't work, then by all means submit a pull request on a new branch. Write tests please :)
 
