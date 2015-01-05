@@ -1,5 +1,5 @@
 {
-    "name":"SWAPI-CF",
+    "name":"CFHolonet",
     "version":"0.0.5",
     "author":"Dan Kraus",
     "location":"",
@@ -9,11 +9,11 @@
     "homepage":"",
     "documentation":"",
     "repository":{
-        "type":"",
-        "url":""
+        "type":"GitHub",
+        "url":"https://github.com/dankraus/cfholonet"
     },
     "bugs":"",
-    "slug":"sw-api",
+    "slug":"cfholonet",
     "shortDescription":"A CF wrapper lib around Star Wars API - http://swapi.co",
     "description":"",
     "instructions":"",
