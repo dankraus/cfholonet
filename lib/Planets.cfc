@@ -1,8 +1,8 @@
 /**
 *
-* @file  /lib/Vehicles.cfc
+* @file  /lib/Planets.cfc
 * @author Dan Kraus
-* @description Vehicles class for Star Wars API Wrapper
+* @description Planets class for Star Wars API Wrapper
 *
 */
 

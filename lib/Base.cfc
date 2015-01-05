@@ -11,7 +11,7 @@ component {
 	public function init(struct data = {}){
 		variables.meta = getMetaData();
 		variables.baseURL = "http://swapi.co/api/";
-		variables.slug = lCase(listLast(meta.fullname, "."));
+		variables.slug = lCase(listLast(variables.meta.fullname, "."));
 
 		if(not structIsEmpty(data)){
 			populateModel(data);
@@ -21,7 +21,7 @@ component {
 
 	public function find(required numeric id){
 		var data = getURI("#variables.baseURL##variables.slug#/#arguments.id#");
-		return createObject("component", meta.fullname).init(data);
+		return createObject("component", variables.meta.fullname).init(data);
 	}
 
 	public function all(){
@@ -32,21 +32,21 @@ component {
 			var data = getURI("#variables.baseURL##variables.slug#/");
 			results.addAll(data['results']);
 			if(structKeyExists(data, 'next') and len(data['next']) ){
-				results.addAll(getUri(data['next']));
+				results.addAll(getUri(data['next'])['results']);
 			} else {
 				hasMore = false;
 			}
 		}
 
 		return results.map(function(entityData){
-			return createObject("component", meta.fullname).init(entityData);
+			return createObject("component", variables.meta.fullname).init(entityData);
 		});
 
 	}
 
 	public function onMissingMethod(name){
 		var entity = replace(arguments.name, "fetch", "");
-		var entityPathToLoad = replaceNoCase(meta.fullname, variables.slug, entity);
+		var entityPathToLoad = replaceNoCase(variables.meta.fullname, variables.slug, entity);
 		var data = {};
 
 		if(structKeyExists(this, entity)){
@@ -59,7 +59,6 @@ component {
 				data = getURI(uri);
 				return createObject("component", entityPathToLoad).init(data);
 			}
-
 		}
 	}
 
@@ -69,7 +68,12 @@ component {
 
 	private function populateModel(required struct data){
 		data.each(function(key){
-			this[key] = data[key];
+			if(structKeyExists(data, key)){
+				this[key] = data[key];
+			} else {
+				this[key] = '';
+			}
+
 		});
 		this.id = listLast(data['url'], '/');
 	}
@@ -97,18 +101,18 @@ component {
 
 	private function handleHTTPResponse(required response){
 		if(response.status_code eq "404"){
-			throw(type="exception", message="Resource not found");
+			throw(type="exception", message="Resource not found.");
 		}
 
 		if(not isJSON(response.filecontent)){
-			throw(type="exception", message="Response is not valid JSON");
+			throw(type="exception", message="Response is not valid JSON.");
 		}
 	}
 
 	private function isValidURL(required string url){
-		var url = ""
+		var url = "";
 		try {
-			url = createObject("java", "java.net.URL").init(arguments.url)
+			url = createObject("java", "java.net.URL").init(arguments.url);
 		} catch(any){
 			return false;
 		}

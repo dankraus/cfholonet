@@ -18,13 +18,13 @@ component extends="testbox.system.BaseSpec"{
 
 	function run(){
 		describe("finder methods", function(){
-			it("finds a Film", function(){
+			it("finds a Person", function(){
 				var people = new lib.People();
-				var film = people.find(1);
-				expect(film).toBeInstanceOf('People');
-				expect(film.title).toBe('A New Hope');
-				expect(film.episode_id).toBe('4');
-				expect(film.id).toBe(1);
+				var person = people.find(1);
+				expect(person).toBeInstanceOf('People');
+				expect(people.name).toBe('Luke Skywalker');
+				expect(people.birth_year).toBe('19BBY');
+				expect(person.id).toBe(1);
 			});
 
 			it("gets all people", function(){
@@ -32,8 +32,16 @@ component extends="testbox.system.BaseSpec"{
 				var people = people.all();
 				expect(people).toBeTypeOf('array');
 				expect(people[1]).toBeInstanceOf('People');
-				expect(people[1].title).toBe('A New Hope');
-				expect(people[1].episode_id).toBe('4');
+				expect(people[1].name).toBe('Luke Skywalker');
+				expect(people[1].birth_year).toBe('19BBY');
+				expect(people[1].id).toBe(1);
+			});
+
+			it("404s on non-existent records", function(){
+				var people = new lib.People();
+				expect(function(){
+					var person = people.find(9999999999999);
+				}).toThrow("exception", "Resource not found.")
 			});
 		});
 
@@ -41,7 +49,7 @@ component extends="testbox.system.BaseSpec"{
 			it("fetches starships", function(){
 				var people = new lib.People();
 				var people = people.find(1);
-				var starships = film.fetchStarships();
+				var starships = people.fetchStarships();
 
 				expect(starships[1]).toBeInstanceOf('Starships');
 			});
@@ -59,13 +67,13 @@ component extends="testbox.system.BaseSpec"{
 				var person = people.find(1);
 				var films = person.fetchFilms();
 
-				expect(species[1]).toBeInstanceOf('Films');
+				expect(films[1]).toBeInstanceOf('Films');
 			});
 
 			it("fetches homeworld (synonym of planets)", function(){
 				var people = new lib.People();
 				var person = people.find(1);
-				var planet = film.fetchHomeworld();
+				var planet = person.fetchHomeworld();
 
 				expect(planets).toBeInstanceOf('Planets');
 			});
@@ -73,17 +81,17 @@ component extends="testbox.system.BaseSpec"{
 			it("fetches planets", function(){
 				var people = new lib.People();
 				var person = people.find(1);
-				var planet = film.fetchPlanets();
+				var planet = person.fetchPlanets();
 
 				expect(planets).toBeInstanceOf('Planets');
 			});
 
-			it("fetches vehicles", function(){
-				var films = new lib.Films();
-				var film = films.find(1);
-				var people = film.fetchVehicles();
+			it("fetches vehicles when they're present", function(){
+				var people = new lib.People();
+				var people = people.find(1);
+				var vehicles = people.fetchVehicles();
 
-				expect(people[1]).toBeInstanceOf('Vehicles');
+				expect(vehicles[1]).toBeInstanceOf('Vehicles');
 			});
 		});
 

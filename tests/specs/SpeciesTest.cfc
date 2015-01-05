@@ -17,96 +17,78 @@ component extends="testbox.system.BaseSpec"{
 /*********************************** BDD SUITES ***********************************/
 
 	function run(){
-		// describe("Init", function(){
-		// 	it('inits with a numeric id', function(){
-		// 		var species = new lib.Species(1);
-		// 		expect(species).toBeInstanceOf('Species');
-		// 	});
+		describe("finder methods", function(){
+			it("finds a Species", function(){
+				var species = new lib.species();
+				var species = species.find(1);
+				expect(species).toBeInstanceOf('Species');
+				expect(species.name).toBe('Human');
+				expect(species.designation).toBe('Sentient');
+				expect(species.id).toBe(1);
+			});
 
-		// 	it('inits with a uri', function(){
-		// 		var species = new lib.Species(uri='http://swapi.co/api/species/1');
-		// 		expect(species).toBeInstanceOf('Species');
-		// 	});
+			it("gets all species", function(){
+				var species = new lib.Species();
+				var species = species.all();
+				expect(species).toBeTypeOf('array');
+				expect(species[1]).toBeInstanceOf('Species');
+				expect(species[1].name).toBe('Human');
+				expect(species[1].designation).toBe('Sentient');
+				expect(species[1].id).toBe(1);
+			});
 
-		// 	it('throws error without an id or uri', function(){
-		// 		expect(function(){ new lib.Species() }).toThrow("exception", "Requires numeric id for resource or complete resource URI string");
-		// 	});
-		// });
+			it("404s on non-existent records", function(){
+				var species = new lib.Species();
+				expect(function(){
+					var species = species.find(9999999999999);
+				}).toThrow("exception", "Resource not found.")
+			});
+		});
 
-		// describe("Populates model properties", function(){
-		// 	var species = new lib.Species(1);
+		describe("fetch methods", function(){
+			it("fetches films", function(){
+				var species = new lib.Species();
+				var species = species.find(1);
+				var films = species.fetchFilms();
 
-		// 	it("can get its name", function(){
-		// 		expect(species.name).toBePresent();
-		// 	});
-		// 	it("can get its classification", function(){
-		// 		expect(species.classification).toBePresent();
-		// 	});
-		// 	it("can get its designation", function(){
-		// 		expect(species.designation).toBePresent();
-		// 	});
-		// 	it("can get its averageHeight", function(){
-		// 		expect(species.averageHeight).toBePresent();
-		// 	});
-		// 	it("can get its skinColors", function(){
-		// 		expect(species.skinColors).toBePresent();
-		// 		expect(species.skinColors).toBeTypeOf('array');
-		// 	});
-		// 	it("can get its hairColors", function(){
-		// 		expect(species.hairColors).toBePresent();
-		// 		expect(species.hairColors).toBeTypeOf('array');
-		// 	});
-		// 	it("can get its eyeColors", function(){
-		// 		expect(species.eyeColors).toBePresent();
-		// 		expect(species.eyeColors).toBeTypeOf('array');
-		// 	});
-		// 	it("can get its averageLifespan", function(){
-		// 		expect(species.averageLifespan).toBePresent();
-		// 	});
-		// 	it("can get its language", function(){
-		// 		expect(species.language).toBePresent();
-		// 	});
-		// 	it("can get its url", function(){
-		// 		expect(species.url).toBePresent();
-		// 	});
-		// 	it("can get its created", function(){
-		// 		expect(species.created).toBePresent();
-		// 	});
-		// 	it("can get its edited", function(){
-		// 		expect(species.edited).toBePresent();
-		// 	});
-		// });
+				expect(films[1]).toBeInstanceOf('Films');
+			});
 
-		// describe("Gets associated resources", function(){
-		// 	it("gets films", function(){
-		// 		var species = new lib.Species(1);
-		// 		var films = species.getFilms();
-		// 		expect(films).toBeTypeOf('array');
-		// 		expect(films[1]).toBeInstanceOf('Film');
-		// 	});
-		// 	it("gets people", function(){
-		// 		var species = new lib.Species(1);
-		// 		var people = species.getPeople();
-		// 		expect(people).toBeTypeOf('array');
-		// 		expect(people[1]).toBeInstanceOf('Person');
-		// 	});
-		// 	it("gets homeworld", function(){
-		// 		var species = new lib.Species(1);
-		// 		var planet = species.getHomeworld();
-		// 		expect(planet).toBeInstanceOf('Planet');
-		// 	});
-		// });
+			it("fetches people", function(){
+				var species = new lib.Species();
+				var species = species.find(1);
+				var people = species.fetchPeople();
 
-		// describe("Schema", function(){
-		// 	it("gets its schema", function(){
-		// 		var person = new lib.Species(1);
-		// 		var response = person.getSchema();
-		// 		var schemaJSON = fileRead(getDirectoryFromPath("/tests/resources/") & "/speciesSchema.json");
+				expect(people[1]).toBeInstanceOf('People');
+			});
 
-		// 		expect(response).toBeTypeOf('struct');
-		// 		expect(response).toBe(deserializeJSON(schemaJSON));
-		// 	});
-		// });
+			it("fetches homeworld (synonym of planets)", function(){
+				var species = new lib.Species();
+				var species = species.find(1);
+				var homeworld = species.fetchHomeworld();
+
+				expect(homeworld).toBeInstanceOf('Planets');
+			});
+
+			it("fetches planets", function(){
+				var species = new lib.Species();
+				var species = species.find(1);
+				var homeworld = species.fetchPlanets();
+
+				expect(homeworld).toBeInstanceOf('Planets');
+			});
+		});
+
+		describe("Schema", function(){
+			it("can gets its schema", function(){
+				var species = new lib.Species();
+				var response = species.getSchema();
+				var schemaJSON = fileRead(getDirectoryFromPath("/tests/resources/") & "/speciesSchema.json");
+
+				expect(response).toBeTypeOf('struct');
+				expect(response).toBe(deserializeJSON(schemaJSON));
+			});
+		});
 	}
 
 }

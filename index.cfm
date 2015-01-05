@@ -1,5 +1,4 @@
 <cfscript>
-	swapi = new lib.SWAPI();
 	p = new lib.Films(1);
 	//writeDump(getMetaData());
 	//test = swapi.getPeople();

@@ -35,6 +35,13 @@ component extends="testbox.system.BaseSpec"{
 				expect(films[1].title).toBe('A New Hope');
 				expect(films[1].episode_id).toBe('4');
 			});
+
+			it("404s on non-existent records", function(){
+				var films = new lib.Films();
+				expect(function(){
+					var film = films.find(9999999999999);
+				}).toThrow("exception", "Resource not found.")
+			});
 		});
 
 		describe("fetch methods", function(){
@@ -65,9 +72,9 @@ component extends="testbox.system.BaseSpec"{
 			it("fetches characters (synonym for people)", function(){
 				var films = new lib.Films();
 				var film = films.find(1);
-				var people = film.fetchPeople();
+				var characters = film.fetchCharacters();
 
-				expect(people[1]).toBeInstanceOf('People');
+				expect(characters[1]).toBeInstanceOf('People');
 			});
 
 			it("fetches people", function(){
@@ -81,9 +88,9 @@ component extends="testbox.system.BaseSpec"{
 			it("fetches vehicles", function(){
 				var films = new lib.Films();
 				var film = films.find(1);
-				var people = film.fetchVehicles();
+				var vehicles = film.fetchVehicles();
 
-				expect(people[1]).toBeInstanceOf('Vehicles');
+				expect(vehicles[1]).toBeInstanceOf('Vehicles');
 			});
 		});
 

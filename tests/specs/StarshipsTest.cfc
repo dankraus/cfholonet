@@ -22,8 +22,8 @@ component extends="testbox.system.BaseSpec"{
 				var starships = new lib.Starships();
 				var starship = starships.find(9);
 				expect(starship).toBeInstanceOf('Starships');
-				expect(film.name).toBe('Death Star');
-				expect(film.model).toBe('DS-1 Orbital Battle Station');
+				expect(starship.name).toBe('Death Star');
+				expect(starship.model).toBe('DS-1 Orbital Battle Station');
 			});
 
 			it("gets all Starships", function(){
@@ -33,13 +33,32 @@ component extends="testbox.system.BaseSpec"{
 				expect(starships[1].name).toBe('Sentinel-class landing craft');
 				expect(starships[1].model).toBe('Sentinel-class landing craft');
 			});
+
+			it("404s on non-existent records", function(){
+				var starships = new lib.Starships();
+				expect(function(){
+					var starship = starships.find(9999999999999);
+				}).toThrow("exception", "Resource not found.")
+			});
 		});
 
 		describe("fetch methods", function(){
-			it("fetches starships", function(){
+			it("fetches films", function(){
 				var starships = new lib.Starships();
 				var starship = starships.find(10);
-				var pilots = film.fetchPilots();
+				var films = starships.fetchFilms();
+				expect(films[1]).toBeInstanceOf('Films');
+			});
+			it("fetches pilots (synonym of people) when they're present", function(){
+				var starships = new lib.Starships();
+				var starship = starships.find(10);
+				var pilots = starships.fetchPilots();
+				expect(starships[1]).toBeInstanceOf('People');
+			});
+			it("fetches people when they're present", function(){
+				var starships = new lib.Starships();
+				var starship = starships.find(10);
+				var pilots = starships.fetchPeople();
 				expect(starships[1]).toBeInstanceOf('People');
 			});
 		});
@@ -48,7 +67,7 @@ component extends="testbox.system.BaseSpec"{
 			it("can gets its schema", function(){
 				var films = new lib.Films();
 				var response = films.getSchema();
-				var schemaJSON = fileRead(getDirectoryFromPath("/tests/resources/") & "/filmsSchema.json");
+				var schemaJSON = fileRead(getDirectoryFromPath("/tests/resources/") & "/starshipsSchema.json");
 
 				expect(response).toBeTypeOf('struct');
 				expect(response).toBe(deserializeJSON(schemaJSON));
