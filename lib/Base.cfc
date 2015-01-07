@@ -20,7 +20,7 @@ component {
 	}
 
 	public function find(required numeric id){
-		var data = getURI("#variables.baseURL##variables.slug#/#arguments.id#");
+		var data = getURL("#variables.baseURL##variables.slug#/#arguments.id#");
 		return createObject("component", variables.meta.fullname).init(data);
 	}
 
@@ -29,10 +29,10 @@ component {
 		var hasMore = true;
 
 		while(hasMore){
-			var data = getURI("#variables.baseURL##variables.slug#/");
+			var data = getURL("#variables.baseURL##variables.slug#/");
 			results.addAll(data['results']);
 			if(structKeyExists(data, 'next') and len(data['next']) ){
-				results.addAll(getUri(data['next'])['results']);
+				results.addAll(getURL(data['next'])['results']);
 			} else {
 				hasMore = false;
 			}
@@ -53,13 +53,13 @@ component {
 		if(findNoCase("fetch", arguments.name)){
 			//check to make sure the resource exists in the object
 			if(structKeyExists(this, resource)){
-				//it could be an array of URIs
+				//it could be an array of URLs
 				if(isArray(this[resource])){
-					return this[resource].map(function(uri){
-						return findResourceByURI(uri);
+					return this[resource].map(function(url){
+						return findResourceByURI(url);
 					});
 				} else if(isValidUrl(this[resource])) {
-					return findResourceByURI(this[resource]);
+					return findResourceByUrl(this[resource]);
 				} else {
 					throw(type="exception", message="#resource# is not a valid uri to fetch for.");
 				}
@@ -74,7 +74,7 @@ component {
 	}
 
 	public function getSchema(){
-		return getURI("#variables.baseURL##variables.slug#/schema");
+		return getURL("#variables.baseURL##variables.slug#/schema");
 	}
 
 	private function populateModel(required struct data){
@@ -90,10 +90,10 @@ component {
 		this.id = listLast(theData['url'], '/');
 	}
 
-	private function findResourceByURI(required string uri){
-		//break up the uri into it's path
+	private function findResourceByUrl(required string url){
+		//break up the url into it's path
 		//ex: http://swapi.co/api/people/2 becomes ["people", "2"]
-		var path = replace(arguments.uri, variables.baseURL, "");
+		var path = replace(arguments.url, variables.baseURL, "");
 		path = listToArray(path, "/");
 
 		var resourceToLoad = path[path.size() -1];
@@ -109,16 +109,16 @@ component {
 		return resourceObject.find(resourceIdToLoad);
 	}
 
-	private function getURI(required string uri){
-		var response = makeHTTPRequest(uri = uri, method = "get");
+	private function getURL(required string url){
+		var response = makeHTTPRequest(url = url, method = "get");
 		return deserializeJSON(response);
 	}
 
-	private function makeHTTPRequest(required string uri, string method ){
+	private function makeHTTPRequest(required string url, string method ){
 		var http = new http();
 		var response = "";
 
-		http.setUrl(arguments.uri);
+		http.setUrl(arguments.url);
 		http.setMethod(arguments.method);
 		http.setCharset("utf-8");
 		http.addParam(type="header", name="User-Agent", value="swapi-coldfusion");
