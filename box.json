@@ -49,7 +49,7 @@
         "testbox":"2.1.0"
     },
     "devDependencies":{
-
+        "testbox":"2.1.0"
     },
     "installPaths":{
         "testbox":"testbox"
