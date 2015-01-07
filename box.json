@@ -14,23 +14,17 @@
     },
     "bugs":"",
     "slug":"cfholonet",
-    "shortDescription":"A CF wrapper lib around Star Wars API - http://swapi.co",
+    "shortDescription":"A CFML wrapper lib around Star Wars API - http://swapi.co",
     "description":"",
     "instructions":"",
     "changelog":"",
     "type":"",
-    "keywords":[
-
-    ],
+    "keywords":["star wars", "rest", "api", "wrapper"],
     "private":false,
     "engines":[
         {
             "type":"railo",
             "version":">=4.1.x"
-        },
-        {
-            "type":"adobe",
-            "version":">=10.0.0"
         }
     ],
     "defaultEngine":"",
