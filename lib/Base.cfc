@@ -80,7 +80,12 @@ component {
 	private function populateModel(required struct data){
 		var theData = arguments.data;
 		theData.each(function(key){
-			this[key] = theData[key];
+			if(structKeyExists(theData, key)){
+				this[key] = theData[key];
+			} else {
+				this[key] = '';
+			}
+
 		});
 		this.id = listLast(theData['url'], '/');
 	}
