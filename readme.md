@@ -35,10 +35,19 @@ Pulled from the specs for reference
 		expect(films[1].episode_id).toBe('4');
 	});
 
-	it("fetches vehicles", function(){
+	it("fetches characters (synonym for people) from an array of people uris", function(){
+		var films = new lib.Films();
+		var film = films.find(1);
+		var characters = film.fetchCharacters();
+
+		expect(characters[1]).toBeInstanceOf('People');
+	});
+
+	it("fetches vehicles from an array of vehicle uris", function(){
 		var films = new lib.Films();
 		var film = films.find(1);
 		var vehicles = film.fetchVehicles();
+
 		expect(vehicles[1]).toBeInstanceOf('Vehicles');
 	});
 
@@ -57,4 +66,4 @@ You can look at the SWAPI for the complete reference of properties available to 
 
 ## Tests
 
-There are a few failing tests at this exact moment. The API frequently uses some synonyms for referencing other resources. Ex: `someVehicle.pilots` is really a reference to an array of `People` resources who have piloted that particular vehicle. The original API returns `pilots` as an array of URIs that point to `People`resources. I'll get these cleaned up shortly, but for now those, resources that use relevant synonyms won't work until I fix them.
+These tests take forever to run. I haven't quite determined why yet. It's in part due to making calls to the live API to fetch data, but seems excessivley long. If anyone has ideas, I'd love to hear them.
