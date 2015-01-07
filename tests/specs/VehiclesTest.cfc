@@ -28,7 +28,7 @@ component extends="testbox.system.BaseSpec"{
 			});
 
 			it("gets all Vehicles", function(){
-				var vehicles = new lib.vehicles();
+				var vehicles = new lib.Vehicles();
 				var vehicles = vehicles.all();
 				expect(vehicles).toBeTypeOf('array');
 				expect(vehicles[1]).toBeInstanceOf('Vehicles');
@@ -46,23 +46,46 @@ component extends="testbox.system.BaseSpec"{
 		});
 
 		describe("fetch methods", function(){
+			var vehicles = new lib.Vehicles();
+			var vehicle = vehicles.find(14);
+
 			it("fetches films", function(){
-				var vehicles = new lib.Vehicles();
-				var vehicle = vehicles.find(14);
 				var films = vehicle.fetchFilms();
 				expect(films[1]).toBeInstanceOf('Films');
 			});
-			it("fetches pilots (synonym of people) when they're present", function(){
-				var vehicles = new lib.Vehicles();
-				var vehicle = vehicles.find(14);
+			it("fetches pilots (synonym of people) when they're present from an array of people uris", function(){
 				var pilots = vehicle.fetchPilots();
 				expect(vehicles[1]).toBeInstanceOf('People');
 			});
-			it("fetches people when they're present", function(){
-				var vehicles = new lib.Vehicles();
-				var vehicle = vehicles.find(14);
-				var pilots = vehicle.fetchPeople();
-				expect(vehicles[1]).toBeInstanceOf('People');
+
+			it("it errors when fetching something that doesn't exist", function(){
+				expect(function(){
+					var vehicles = vehicles.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "Method not found.")
+			});
+
+			it("fetches url, a uri to load", function(){
+				var theSamevehicle = vehicles.fetchURL();
+
+				expect(theSamevehicle).toBeInstanceOf('vehicles');
+			});
+
+			it("it errors when trying to fetch something that doesn't exist", function(){
+				expect(function(){
+					vehicle.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "There is no resource 'FoobarGoblledyGuck' to fetch.")
+			});
+
+			it("it errors when trying to fetch something that isn't a uri", function(){
+				expect(function(){
+					vehicle.fetchName();
+				}).toThrow("exception", "Title is not a valid uri to fetch for.")
+			});
+
+			it("it errors when a method doesn't exist", function(){
+				expect(function(){
+					vehicle.SomeJunkIMadeUpThatDoesntExist();
+				}).toThrow("exception", "There is no method with the name SomeJunkIMadeUpThatDoesntExist")
 			});
 		});
 

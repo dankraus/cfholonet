@@ -46,59 +46,69 @@ component extends="testbox.system.BaseSpec"{
 		});
 
 		describe("fetch methods", function(){
-			it("fetches starships", function(){
-				var people = new lib.People();
-				var people = people.find(1);
-				var starships = people.fetchStarships();
+			var people = new lib.People();
+			var person = people.find(1);
 
+			it("fetches starships from an array of starships uris", function(){
+				var starships = person.fetchStarships();
 				expect(starships[1]).toBeInstanceOf('Starships');
 			});
 
-			it("fetches species", function(){
-				var people = new lib.People();
-				var person = people.find(1);
+			it("fetches species from an array of species uris", function(){
 				var species = person.fetchSpecies();
-
 				expect(species[1]).toBeInstanceOf('Species');
 			});
 
-			it("fetches films", function(){
-				var people = new lib.People();
-				var person = people.find(1);
+			it("fetches films from an array of film uris", function(){
 				var films = person.fetchFilms();
-
 				expect(films[1]).toBeInstanceOf('Films');
 			});
 
-			it("fetches homeworld (synonym of planets)", function(){
-				var people = new lib.People();
-				var person = people.find(1);
+			it("fetches homeworld (synonym of planets) from a planet uri", function(){
 				var planet = person.fetchHomeworld();
-
 				expect(planets).toBeInstanceOf('Planets');
 			});
 
-			it("fetches planets", function(){
-				var people = new lib.People();
-				var person = people.find(1);
-				var planet = person.fetchPlanets();
-
-				expect(planets).toBeInstanceOf('Planets');
-			});
-
-			it("fetches vehicles when they're present", function(){
-				var people = new lib.People();
-				var people = people.find(1);
+			it("fetches vehicles when they're present from an array of vehicles uris", function(){
 				var vehicles = people.fetchVehicles();
 
 				expect(vehicles[1]).toBeInstanceOf('Vehicles');
+			});
+
+			it("it errors when fetching something that doesn't exist", function(){
+				expect(function(){
+					var person = people.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "Method not found.")
+			});
+
+			it("fetches url, a uri to load", function(){
+				var theSamePerson = person.fetchURL();
+				expect(theSamePerson).toBeInstanceOf('People');
+			});
+
+			it("it errors when trying to fetch something that doesn't exist", function(){
+				expect(function(){
+					person.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "There is no resource 'FoobarGoblledyGuck' to fetch.")
+			});
+
+			it("it errors when trying to fetch something that isn't a uri", function(){
+				expect(function(){
+					person.fetchName();
+				}).toThrow("exception", "Title is not a valid uri to fetch for.")
+			});
+
+			it("it errors when a method doesn't exist", function(){
+				expect(function(){
+					person.SomeJunkIMadeUpThatDoesntExist();
+				}).toThrow("exception", "There is no method with the name SomeJunkIMadeUpThatDoesntExist")
 			});
 		});
 
 		describe("Schema", function(){
 			it("can gets its schema", function(){
-				var films = new lib.Films();
-				var response = films.getSchema();
+				var people = new lib.People();
+				var response = people.getSchema();
 				var schemaJSON = fileRead(getDirectoryFromPath("/tests/resources/") & "/peopleSchema.json");
 
 				expect(response).toBeTypeOf('struct');

@@ -45,53 +45,58 @@ component extends="testbox.system.BaseSpec"{
 		});
 
 		describe("fetch methods", function(){
-			it("fetches starships", function(){
-				var films = new lib.Films();
-				var film = films.find(1);
-				var starships = film.fetchStarships();
+			var films = new lib.Films();
+			var film = films.find(1);
 
+			it("fetches starships from an array of starship uris", function(){
+				var starships = film.fetchStarships();
 				expect(starships[1]).toBeInstanceOf('Starships');
 			});
 
-			it("fetches species", function(){
-				var films = new lib.Films();
-				var film = films.find(1);
+			it("fetches species from an array of species uris", function(){
 				var species = film.fetchSpecies();
-
 				expect(species[1]).toBeInstanceOf('Species');
 			});
 
-			it("fetches planets", function(){
-				var films = new lib.Films();
-				var film = films.find(1);
+			it("fetches planets from an array of planet uris", function(){
 				var planets = film.fetchPlanets();
-
 				expect(planets[1]).toBeInstanceOf('Planets');
 			});
 
-			it("fetches characters (synonym for people)", function(){
-				var films = new lib.Films();
-				var film = films.find(1);
+			it("fetches characters (synonym for people) from an array of people uris", function(){
 				var characters = film.fetchCharacters();
-
 				expect(characters[1]).toBeInstanceOf('People');
 			});
 
-			it("fetches people", function(){
-				var films = new lib.Films();
-				var film = films.find(1);
-				var people = film.fetchPeople();
-
-				expect(people[1]).toBeInstanceOf('People');
-			});
-
-			it("fetches vehicles", function(){
-				var films = new lib.Films();
-				var film = films.find(1);
+			it("fetches vehicles from an array of vehicle uris", function(){
 				var vehicles = film.fetchVehicles();
 
 				expect(vehicles[1]).toBeInstanceOf('Vehicles');
 			});
+
+			it("fetches url, a uri to load", function(){
+				var theSameFilm = film.fetchURL();
+				expect(theSameFilm).toBeInstanceOf('Films');
+			});
+
+			it("it errors when trying to fetch something that doesn't exist", function(){
+				expect(function(){
+					film.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "There is no resource 'FoobarGoblledyGuck' to fetch.")
+			});
+
+			it("it errors when trying to fetch something that isn't a uri", function(){
+				expect(function(){
+					film.fetchTitle();
+				}).toThrow("exception", "Title is not a valid uri to fetch for.")
+			});
+
+			it("it errors when a method doesn't exist", function(){
+				expect(function(){
+					film.SomeJunkIMadeUpThatDoesntExist();
+				}).toThrow("exception", "There is no method with the name SomeJunkIMadeUpThatDoesntExist")
+			});
+
 		});
 
 		describe("Schema", function(){

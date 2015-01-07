@@ -44,24 +44,46 @@ component extends="testbox.system.BaseSpec"{
 		});
 
 		describe("fetch methods", function(){
-			it("fetches films", function(){
-				var planets = new lib.Planets();
-				var planet = planets.find(1);
-				var films = planet.fetchFilms();
+			var planets = new lib.Planets();
+			var planet = planets.find(1);
 
+			it("fetches films", function(){
+				var films = planet.fetchFilms();
 				expect(films[1]).toBeInstanceOf('Films');
 			});
-			it("fetches residents (synonym of people) when they're present", function(){
-				var planets = new lib.Planets();
-				var planet = planets.find(1);
+			it("fetches residents (synonym of people) when they're present from an array of people uris", function(){
 				var residents = planet.fetchResidents();
 				expect(residents[1]).toBeInstanceOf('People');
 			});
-			it("fetches people  when they're present", function(){
-				var planets = new lib.Planets();
-				var planet = planets.find(1);
-				var residents = planet.fetchResidents();
-				expect(residents[1]).toBeInstanceOf('People');
+
+			it("it errors when fetching something that doesn't exist", function(){
+				expect(function(){
+					var planets = planets.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "Method not found.")
+			});
+
+			it("fetches url, a uri to load", function(){
+				var theSameplanet = planets.fetchURL();
+
+				expect(theSameplanet).toBeInstanceOf('planets');
+			});
+
+			it("it errors when trying to fetch something that doesn't exist", function(){
+				expect(function(){
+					planet.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "There is no resource 'FoobarGoblledyGuck' to fetch.")
+			});
+
+			it("it errors when trying to fetch something that isn't a uri", function(){
+				expect(function(){
+					planet.fetchName();
+				}).toThrow("exception", "Title is not a valid uri to fetch for.")
+			});
+
+			it("it errors when a method doesn't exist", function(){
+				expect(function(){
+					planet.SomeJunkIMadeUpThatDoesntExist();
+				}).toThrow("exception", "There is no method with the name SomeJunkIMadeUpThatDoesntExist")
 			});
 		});
 

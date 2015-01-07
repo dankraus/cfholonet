@@ -43,23 +43,47 @@ component extends="testbox.system.BaseSpec"{
 		});
 
 		describe("fetch methods", function(){
+			var starships = new lib.Starships();
+			var starship = starships.find(10);
+
 			it("fetches films", function(){
-				var starships = new lib.Starships();
-				var starship = starships.find(10);
 				var films = starships.fetchFilms();
 				expect(films[1]).toBeInstanceOf('Films');
 			});
-			it("fetches pilots (synonym of people) when they're present", function(){
-				var starships = new lib.Starships();
-				var starship = starships.find(10);
+
+			it("fetches pilots (synonym of people) when they're present from an array of people uris", function(){
 				var pilots = starships.fetchPilots();
 				expect(starships[1]).toBeInstanceOf('People');
 			});
-			it("fetches people when they're present", function(){
-				var starships = new lib.Starships();
-				var starship = starships.find(10);
-				var pilots = starships.fetchPeople();
-				expect(starships[1]).toBeInstanceOf('People');
+
+			it("it errors when fetching something that doesn't exist", function(){
+				expect(function(){
+					var starships = starships.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "Method not found.")
+			});
+
+			it("fetches url, a uri to load", function(){
+				var theSameStarship = starships.fetchURL();
+
+				expect(theSameStarship).toBeInstanceOf('starships');
+			});
+
+			it("it errors when trying to fetch something that doesn't exist", function(){
+				expect(function(){
+					starship.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "There is no resource 'FoobarGoblledyGuck' to fetch.")
+			});
+
+			it("it errors when trying to fetch something that isn't a uri", function(){
+				expect(function(){
+					starship.fetchName();
+				}).toThrow("exception", "Title is not a valid uri to fetch for.")
+			});
+
+			it("it errors when a method doesn't exist", function(){
+				expect(function(){
+					starship.SomeJunkIMadeUpThatDoesntExist();
+				}).toThrow("exception", "There is no method with the name SomeJunkIMadeUpThatDoesntExist")
 			});
 		});
 

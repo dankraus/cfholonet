@@ -46,36 +46,51 @@ component extends="testbox.system.BaseSpec"{
 		});
 
 		describe("fetch methods", function(){
-			it("fetches films", function(){
-				var species = new lib.Species();
-				var species = species.find(1);
-				var films = species.fetchFilms();
+			var species = new lib.Species();
+			var species = species.find(1);
 
+			it("fetches films from an array of film uris", function(){
+				var films = species.fetchFilms();
 				expect(films[1]).toBeInstanceOf('Films');
 			});
 
-			it("fetches people", function(){
-				var species = new lib.Species();
-				var species = species.find(1);
+			it("fetches people from an array of people uris", function(){
 				var people = species.fetchPeople();
-
 				expect(people[1]).toBeInstanceOf('People');
 			});
 
-			it("fetches homeworld (synonym of planets)", function(){
-				var species = new lib.Species();
-				var species = species.find(1);
+			it("fetches homeworld (synonym of planets) from a planet uri", function(){
 				var homeworld = species.fetchHomeworld();
-
 				expect(homeworld).toBeInstanceOf('Planets');
 			});
 
-			it("fetches planets", function(){
-				var species = new lib.Species();
-				var species = species.find(1);
-				var homeworld = species.fetchPlanets();
+			it("it errors when fetching something that doesn't exist", function(){
+				species(function(){
+					species.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "Method not found.")
+			});
 
-				expect(homeworld).toBeInstanceOf('Planets');
+			it("fetches url, a uri to load", function(){
+				var theSameSpecies = species.fetchURL();
+				expect(theSameSpecies).toBeInstanceOf('Species');
+			});
+
+			it("it errors when trying to fetch something that doesn't exist", function(){
+				expect(function(){
+					species.fetchFoobarGoblledyGuck();
+				}).toThrow("exception", "There is no resource 'FoobarGoblledyGuck' to fetch.")
+			});
+
+			it("it errors when trying to fetch something that isn't a uri", function(){
+				expect(function(){
+					species.fetchName();
+				}).toThrow("exception", "Title is not a valid uri to fetch for.")
+			});
+
+			it("it errors when a method doesn't exist", function(){
+				expect(function(){
+					species.SomeJunkIMadeUpThatDoesntExist();
+				}).toThrow("exception", "There is no method with the name SomeJunkIMadeUpThatDoesntExist")
 			});
 		});
 
