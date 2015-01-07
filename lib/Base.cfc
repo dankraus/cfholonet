@@ -13,8 +13,8 @@ component {
 		variables.baseURL = "http://swapi.co/api/";
 		variables.slug = lCase(listLast(variables.meta.fullname, "."));
 
-		if(not structIsEmpty(data)){
-			populateModel(data);
+		if(not structIsEmpty(arguments.data)){
+			populateModel(arguments.data);
 		}
 		return this;
 	}
@@ -78,15 +78,11 @@ component {
 	}
 
 	private function populateModel(required struct data){
-		arguments.data.each(function(key){
-			if(structKeyExists(this, key)){
-				this[key] = arguments.data[key];
-			} else {
-				this[key] = '';
-			}
-
+		var theData = arguments.data;
+		theData.each(function(key){
+			this[key] = theData[key];
 		});
-		this.id = listLast(arguments.data['url'], '/');
+		this.id = listLast(theData['url'], '/');
 	}
 
 	private function findResourceByURI(required string uri){
