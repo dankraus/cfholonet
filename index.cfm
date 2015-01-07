@@ -1,10 +1,6 @@
 <cfscript>
-	p = new lib.Films(1);
-	//writeDump(getMetaData());
-	//test = swapi.getPeople();
-	//test = swapi.getSchemaFor("people");
-	//writeDump(p.getStarships());
-
-	//base = new lib.Base();
-	//base.getResource(resource = 'people', uri = "http://swapi.com/api/people/somethingmadeup");
+	films = new lib.Films();
+	film = films.find(1);
+	writeDump(film);
+	writeDump(film.fetchStarships());
 </cfscript>
