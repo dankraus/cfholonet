@@ -56,12 +56,12 @@ component {
 				//it could be an array of URLs
 				if(isArray(this[resource])){
 					return this[resource].map(function(url){
-						return findResourceByURI(url);
+						return findResourceByURL(arguments.url);
 					});
 				} else if(isValidUrl(this[resource])) {
 					return findResourceByUrl(this[resource]);
 				} else {
-					throw(type="exception", message="#resource# is not a valid uri to fetch for.");
+					throw(type="exception", message="#resource# is not a valid url to fetch for.");
 				}
 			} else {
 				//special nice message to tell them that they can't 'fetch' the thing they want
