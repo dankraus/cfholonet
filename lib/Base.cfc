@@ -110,7 +110,7 @@ component {
 	}
 
 	private function getURL(required string url){
-		var response = makeHTTPRequest(url = url, method = "get");
+		var response = makeHTTPRequest(url = arguments.url, method = "get");
 		return deserializeJSON(response);
 	}
 
